@@ -1,4 +1,4 @@
-# ✅ Pneumonia Detection (Final & Balanced Version)
+#Pneumonia Detection (Final & Balanced Version)
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
@@ -8,9 +8,7 @@ import matplotlib.pyplot as plt
 # Step 1: Define dataset paths
 train_dir = r"C:\Users\sinch\Downloads\chest_xray\train"
 val_dir = r"C:\Users\sinch\Downloads\chest_xray\val"
-test_dir = r"C:\Users\sinch\Downloads\chest_xray\test"
-
-print("✅ Dataset paths set correctly!")
+test_dir = r"C:\Users\sinch\Downloads\chest_xray\tes
 
 # Step 2: Data augmentation & normalization
 train_datagen = ImageDataGenerator(
@@ -38,9 +36,7 @@ val_data = val_datagen.flow_from_directory(
     target_size=(150, 150),
     batch_size=32,
     class_mode='binary'
-)
-
-print("✅ Images loaded successfully!")
+) 
 
 # Step 3: Build the CNN model
 model = Sequential([
@@ -65,7 +61,6 @@ model = Sequential([
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 model.summary()
 
-# ✅ Step 4: Train the model (no class weights needed)
 history = model.fit(
     train_data,
     validation_data=val_data,
@@ -75,7 +70,7 @@ history = model.fit(
 
 # Step 5: Save trained model
 model.save(r"C:\Users\sinch\Desktop\pneumonia_model.keras")
-print("✅ Model saved successfully!")
+print("Model saved successfully!")
 
 # Step 6: Plot accuracy & loss graphs
 plt.figure(figsize=(10, 4))
@@ -99,48 +94,35 @@ plt.ylabel('Loss')
 plt.legend()
 
 plt.show()
-# 🌟 Advanced Pneumonia Detection Result Dashboard 🌟
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-# ✅ Load the trained model
+
 model = load_model(r"C:\Users\sinch\Desktop\pneumonia_model.keras")
-print("✅ Model loaded successfully!")
-
-# ✅ Choose image path
+print("Model loaded successfully!")
 img_path = r"C:\Users\sinch\Downloads\chest_xray\test\PNEUMONIA\person100_bacteria_475.jpeg"
-
-# ✅ Preprocess image
 img = image.load_img(img_path, target_size=(150, 150))
 img_array = image.img_to_array(img)
 img_array = np.expand_dims(img_array, axis=0) / 255.0
-
-# ✅ Predict
 raw_pred = model.predict(img_array)
 prediction = raw_pred[0][0]
 
-# ✅ Set result label, color & confidence
+
 if prediction >= 0.5:
-    label = "PNEUMONIA DETECTED 😷"
+    label = "PNEUMONIA DETECTED "
     confidence = prediction * 100
     color = "red"
-    advice = "⚠️ Seek medical advice immediately. Early treatment helps recovery."
+    advice = "Seek medical advice immediately. Early treatment helps recovery."
 else:
-    label = "NORMAL LUNGS 🫁"
+    label = "NORMAL LUNGS "
     confidence = (1 - prediction) * 100
     color = "green"
-    advice = "✅ Your lungs look healthy! Maintain good hygiene and stay fit."
-
-# ✅ Create figure layout
+    advice = " Your lungs look healthy! Maintain good hygiene and stay fit."
 fig = plt.figure(figsize=(7, 8))
-grid = plt.GridSpec(3, 1, height_ratios=[4, 0.5, 1.2], hspace=0.4)
-
-# =======================
-# 1️⃣ IMAGE DISPLAY
-# =======================
+grid = plt.GridSpec(3, 1, height_ratios=[4, 0.5, 1.2], hspace=0.4
 ax1 = fig.add_subplot(grid[0])
 ax1.imshow(image.load_img(img_path))
 ax1.axis("off")
@@ -153,10 +135,6 @@ rect = patches.FancyBboxPatch(
 ax1.add_patch(rect)
 ax1.text(0.5, 0.94, label, color=color, fontsize=16, fontweight='bold',
          ha='center', va='center', transform=ax1.transAxes)
-
-# =======================
-# 2️⃣ CONFIDENCE BAR
-# =======================
 ax2 = fig.add_subplot(grid[1])
 ax2.barh(["Confidence"], [confidence], color=color, alpha=0.8)
 ax2.set_xlim(0, 100)
@@ -165,9 +143,7 @@ ax2.set_title("AI Confidence Level", fontsize=12)
 for i, v in enumerate([confidence]):
     ax2.text(v + 1, i, f"{v:.2f}%", color='black', va='center', fontsize=12)
 
-# =======================
-# 3️⃣ SUMMARY BOX
-# =======================
+
 ax3 = fig.add_subplot(grid[2])
 ax3.axis("off")
 ax3.text(0.5, 0.7, f"🧠 AI Diagnosis: {label}",
@@ -179,14 +155,11 @@ ax3.text(0.5, 0.2, advice,
 
 plt.suptitle("Pneumonia Detection Result Dashboard", fontsize=15, fontweight='bold')
 plt.show()
-
-# ✅ Terminal summary
-print("\n🩺 ====== AI DIAGNOSIS SUMMARY ======")
-print(f"📂 Image Path: {img_path}")
-print(f"🧠 Result: {label}")
-print(f"📊 Confidence: {confidence:.2f}%")
-print(f"💡 Advice: {advice}")
-print("=====================================")
+print("\n =AI DIAGNOSIS SUMMARY =")
+print(f"Image Path: {img_path}")
+print(f" Result: {label}")
+print(f"Confidence: {confidence:.2f}%")
+print(f"Advice: {advice}")
 import streamlit as st
 from tensorflow.keras.models import load_model
 from PIL import Image
@@ -197,24 +170,16 @@ model = load_model('pneumonia_model.keras')
 
 st.title("Pneumonia Detection")
 st.write("Upload a chest X-ray image to check for Pneumonia.")
-
-# File uploader
 uploaded_file = st.file_uploader("Choose an X-ray image", type=["jpg","png","jpeg"])
 
 if uploaded_file is not None:
-    # Open image and display it
-    img = Image.open(uploaded_file).convert('RGB')  # Convert to 3 channels
+    img = Image.open(uploaded_file).convert('RGB') 
     st.image(img, caption='Uploaded Image',use_container_width=True)
+    img = img.resize((150,150))                     
+    img_array = np.array(img)/255.0                 
+    img_array = np.expand_dims(img_array, axis=0) 
     
-    # Preprocess image for model
-    img = img.resize((150,150))                      # Resize to model input size
-    img_array = np.array(img)/255.0                  # Normalize
-    img_array = np.expand_dims(img_array, axis=0)   # Add batch dimension
-    
-    # Make prediction
     prediction = model.predict(img_array)[0][0]
-    
-    # Display result
     if prediction > 0.5:
         st.error(f"Pneumonia Detected! Confidence: {prediction*100:.2f}%")
     else:
